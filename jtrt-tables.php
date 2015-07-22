@@ -10,7 +10,7 @@ Description: Custom responsive tables plugin for Wordpress
 
 Author: John Tendik
 
-Version: 1.3
+Version: 1.2
 
 */
 
