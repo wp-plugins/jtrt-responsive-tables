@@ -1,16 +1,10 @@
 <?php
 /*
-
-Plugin Name: JT Responsive Tables
-
-Plugin URI: //
-
+Plugin Name: JTRT Responsive Tables
+Plugin URI: https://github.com/mythirdeye/jtrt-tables
 Description: Custom responsive tables plugin for Wordpress
-
 Author: John Tendik
-
-Version: 1.2.1.2
-
+Version: 1.2.1.3
 */
 
 

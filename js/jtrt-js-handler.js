@@ -28,11 +28,11 @@
 
 			custom_uploader = wp.media.frames.file_frame = wp.media({
 
-				title: 'Choose Image',
+				title: 'Choose CSV File',
 
 				button: {
 
-					text: 'Choose Image'
+					text: 'Choose CSV File'
 
 				},
 
