@@ -280,17 +280,17 @@ function jtrt_front_end_styles() {
     $jtrt_options = get_option('jtrt_tables_options');
 
     $jtrt_options_array = array(
-		'jtrt_mobile_bp' => $jtrt_options['kwrc_table_foo_breakpoint_mobile'],
-		'jtrt_tablet_bp' => $jtrt_options['kwrc_table_foo_breakpoint_tablet']
+		'jtrt_mobile_bp' => 480,
+		'jtrt_tablet_bp' => 920
 	);
 
-	if(!$jtrt_options['kwrc_table_foo_breakpoint_mobile']){
+	if($jtrt_options['kwrc_table_foo_breakpoint_mobile']){
 
-		$jtrt_options_array['jtrt_mobile_bp'] = 480;
+		$jtrt_options_array['jtrt_mobile_bp'] = $jtrt_options['kwrc_table_foo_breakpoint_mobile'];
 
-	}elseif (!$jtrt_options['kwrc_table_foo_breakpoint_tablet']) {
+	}elseif ($jtrt_options['kwrc_table_foo_breakpoint_tablet']) {
 		
-		$jtrt_options_array['jtrt_tablet_bp'] = 920;
+		$jtrt_options_array['jtrt_tablet_bp'] = $jtrt_options['kwrc_table_foo_breakpoint_tablet'];
 
 	}
     wp_localize_script( 'footable_init_hook', 'jtrt_options_arr', $jtrt_options_array );
