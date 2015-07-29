@@ -4,7 +4,7 @@ Plugin Name: JTRT Responsive Tables
 Plugin URI: https://github.com/mythirdeye/jtrt-tables
 Description: Custom responsive tables plugin for Wordpress
 Author: John Tendik
-Version: 1.2.1.3
+Version: 1.2.2
 */
 
 
@@ -16,6 +16,8 @@ Version: 1.2.1.3
 add_action( 'admin_menu', 'jtrt_tables_admin_menu' );
 add_action( 'admin_enqueue_scripts', 'jtrt_tables_script_caller' );
 add_action( 'wp_enqueue_scripts', 'jtrt_front_end_styles' );
+
+
 
 function jtrt_tables_admin_menu() { 
 
@@ -35,8 +37,7 @@ function jtrt_tables_plugin_options_page(){
 
 	$jtrt_options = get_option('jtrt_tables_options');
 
-
-	
+	add_thickbox();
 
 	?>
 
@@ -73,7 +74,7 @@ function jtrt_tables_plugin_options_page(){
 
 										<td>
 											<div class="jtrt-blockquote">
-												<p>Coming Soon!</p>
+												<iframe width="420" height="315" src="https://www.youtube.com/embed/OTxaksRothY" frameborder="0" allowfullscreen></iframe>
 											</div>
 										</td>
 									</tr>
@@ -162,6 +163,7 @@ function jtrt_tables_plugin_options_page(){
 		    			<?php do_settings_sections( 'jtrt-options-group' ); ?>
 
 					   <table class="form-table">
+					   		
 							<tbody>
 								<tr>
 									<th scope="row">
@@ -172,7 +174,10 @@ function jtrt_tables_plugin_options_page(){
 										<input id="upload_image" type="text" size="36" input type='text' name='jtrt_tables_options[kwrc_table_link]' value='<?php echo empty($jtrt_options['kwrc_table_link']) ? 'Insert CSV HERE' : $jtrt_options['kwrc_table_link']; ?>'/> 
 
 										<input id="upload_image_button" class="button" type="button" value="Upload file" />
-										<small>Enter a URL or upload a CSV file</small>
+										<small>Enter a URL or upload a CSV file</small></br></br>
+										<!-- <a id="jtrt-generate-table-button" class="button">Generate Table</a> -->
+										
+										<input alt="#TB_inline?height=700&amp;width=900&amp;inlineId=jtrt_thickbox_tableviewer" title="Table Generator Viewer" id="jtrt-generate-table-button" class="thickbox button" type="button" value="Generate Table" />  
 									</td>
 								</tr>
 								<tr>
@@ -193,19 +198,47 @@ function jtrt_tables_plugin_options_page(){
 											</div>
 										</td>
 								</tr>
+								
+							</tbody>
+
+						</table>
+
+						
+										
+					
+								
+
+					
+						
+						<div id="jtrt_thickbox_tableviewer" style="display:none">
+						<h2>Generated Table Viewer/Editor</h2>
+						<table class="form-table">
+							<tbody>
 								<tr>
 									<th scope="row">
-
-										<label for="upload_image"><b>Table Controls</b></label>
-
+										<label for="upload_image"><b>Enable Table Filters</b></label>
 									</th>
 
 									<td>
-										
-										
-										<a id="jtrt-generate-table-button" class="button">Generate Table</a>
-										<a id="jtrt-generate-html-button" class="button">Generate HTML</a>
-										<label class="switch">
+										<input type="checkbox" name="jtrt_filters_check" value="true"> Enable Tabler Filters <small>This will allow you to search through the form using a search box and filter the content</small>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">
+										<label for="upload_image"><b>Enable Table Sorting</b></label>
+									</th>
+
+									<td>
+										<input type="checkbox" name="jtrt_sorting_check" value="true"> Enable Tabler Sorting <small>This will allow you to sort the table</small>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">
+										<label for="upload_image"><b>Mobile/Tablet Hide Column Buttons</b></label>
+									</th>
+
+									<td>
+										<label class="switch" id="jtrt_switch">
 											<span class="button active" data-switch="mobile">Mobile</span>
 											<span class="button" data-switch="tablet">Tablet</span>
 										</label>
@@ -213,47 +246,70 @@ function jtrt_tables_plugin_options_page(){
 								</tr>
 								<tr>
 									<th scope="row">
-
-										<label for="upload_image"><b>Table Viewer</b></label>
-
+										<label for="upload_image"><b>Column Count Helper</b></label>
 									</th>
 
 									<td>
+										<p id="jtrt_column_counter"></p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 
-										<div class="insert_jtrt_here">
-						
-										</div>
+						<div class="form-table">		
+							<div class="insert_jtrt_here">
+					
+							</div>
+							
+						</div>
 
+						<table class="form-table">
+							<tbody>
+								<tr>
+									<th scope="row">
+										<label for="upload_image"><b>Generate HTML</b></label>
+									</th>
+
+									<td>
+										<a id="jtrt-generate-html-button" class="button" style="margin-right:10px">Generate HTML</a>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">
+										<label for="upload_image"><b>Copy Paste HTML</b></label>
+									</th>
+
+									<td>
 										<textarea name="jtrt_html_box" id="jtrt_html_box" cols="30" rows="10"></textarea>
 									</td>
 								</tr>
 							</tbody>
 						</table>
+
+						
+
+						
+						
+						
+						
+					
+						</div>
 					<?php submit_button(); ?>			
 				</form>
 		    </div>
 		</div>
-
-		
-
-		
-		
-		
-		
-		
-
-
-		
-
-	    
-	    	
-
 		
 	</div>
 
 	<?php
 
 }
+
+$jtrt_table_shortcode_count = 1;
+
+update_option('jtrt_tables_options["jtrt_shortcode_count"]', $jtrt_table_shortcode_count);
+
+
 
 function jtrt_tables_script_caller( $hook_suffix ) {
 
@@ -267,8 +323,19 @@ function jtrt_tables_script_caller( $hook_suffix ) {
 	wp_enqueue_script( 'table-generator-from-csv', plugins_url( '/js/jquery.csvToTable.js', __FILE__ ), array( 'jquery' ), 1, true );
 	wp_register_script( 'jtrt-csv-upload', plugins_url( '/js/jtrt-js-handler.js', __FILE__ ), array( 'jquery' ), 1, true );
 	wp_enqueue_script( 'jtrt-csv-upload' );
+	$jtrt_options = get_option('jtrt_tables_options');
+
+	if (!isset($jtrt_table_shortcode_count)){
+    	$jtrt_table_shortcode_count = 1;
+    }
+
+    $jtrt_options_array = array(
+		'jtrt_shortcode_count' => $jtrt_table_shortcode_count
+	);
+
+    wp_localize_script( 'jtrt-csv-upload', 'jtrt_options_arr', $jtrt_options_array );
 	wp_enqueue_style( 'jtrt-custom-style', plugins_url( '/css/jtrt-tables.css', __FILE__ ) );
-		
+	
 
 }
 
@@ -279,25 +346,29 @@ function jtrt_front_end_styles() {
 
     $jtrt_options = get_option('jtrt_tables_options');
 
+    if (!isset($jtrt_options['kwrc_table_foo_breakpoint_tablet'])){
+    	$jtrt_options['kwrc_table_foo_breakpoint_tablet'] = 980;
+    }
+    if (!isset($jtrt_options['kwrc_table_foo_breakpoint_mobile'])){
+    	$jtrt_options['kwrc_table_foo_breakpoint_mobile'] = 480;
+    }
+
     $jtrt_options_array = array(
-		'jtrt_mobile_bp' => 480,
-		'jtrt_tablet_bp' => 920
+		'jtrt_mobile_bp' => $jtrt_options['kwrc_table_foo_breakpoint_mobile'],
+		'jtrt_tablet_bp' => $jtrt_options['kwrc_table_foo_breakpoint_tablet']
 	);
 
-	if($jtrt_options['kwrc_table_foo_breakpoint_mobile']){
+	
 
-		$jtrt_options_array['jtrt_mobile_bp'] = $jtrt_options['kwrc_table_foo_breakpoint_mobile'];
-
-	}elseif ($jtrt_options['kwrc_table_foo_breakpoint_tablet']) {
-		
-		$jtrt_options_array['jtrt_tablet_bp'] = $jtrt_options['kwrc_table_foo_breakpoint_tablet'];
-
-	}
     wp_localize_script( 'footable_init_hook', 'jtrt_options_arr', $jtrt_options_array );
     wp_enqueue_script( 'footable_init_hook' );
+    wp_register_script( 'jtrt-footable-sorting', plugins_url( '/includes/footable.sort.min.js', __FILE__ ), array( 'jquery' ), 1, true );
+	wp_enqueue_script( 'jtrt-footable-sorting' );
+	wp_register_script( 'jtrt-footable-filter', plugins_url( '/includes/footable.filter.min.js', __FILE__ ), array( 'jquery' ), 1, true );
+	wp_enqueue_script( 'jtrt-footable-filter' );
     wp_register_script( 'jtrt-csv-upload2', plugins_url( '/js/jtrt-js-handler-frontend.js', __FILE__ ), array( 'jquery' ), 1, true );
-	wp_enqueue_script( 'jtrt-csv-upload2' );
-    wp_enqueue_style( 'custom-style', plugins_url( '/jtrt-tables.css', __FILE__ ) );
+	wp_enqueue_script( 'jtrt-csv-upload2' );	
+    // wp_enqueue_style( 'custom-style', plugins_url( 'css/jtrt-tables.css', __FILE__ ) );
     
 }
 

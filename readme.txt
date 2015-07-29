@@ -3,8 +3,8 @@ Contributors: MyThirdEye
 Donate link: //
 Tags: responsive tables, responsive, table, table generator, csv to table, csv, convert csv, responsive table generator, foo tables, responsive table, mobile tables, awesome table generator
 Requires at least: 4.0
-Tested up to: 4.2.2
-Stable tag: 1.2.1.3
+Tested up to: 4.2.3
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,6 +42,13 @@ No, everything happens in the backend using a live representation of your table.
 2. The end results on mobile sized screens.
 
 == Changelog ==
+
+= 1.2.2 =
+*Added the ability to sort and filter the tables
+*Fixed headers error
+*Fixed some styling issues
+*Updated the backend styling
+*Added a new video tutorial to the docs section
 
 = 1.2.1 =
 * Updated the readme file.
